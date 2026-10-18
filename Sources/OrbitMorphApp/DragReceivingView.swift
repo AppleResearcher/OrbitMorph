@@ -150,9 +150,10 @@ final class DragReceivingView: NSView {
         let p = convert(sender.draggingLocation, from: nil)
         let candidate = pageCandidate(at: p)
         updatePageDwell(candidate: candidate)
+        let outerRadius = Double(min(bounds.width, bounds.height)) / 2 - 16
         let index = WheelGeometry.segmentIndex(point: .init(x: p.x, y: bounds.minY + bounds.maxY - p.y),
-            center: .init(x: bounds.midX, y: bounds.midY), innerRadius: (min(bounds.width, bounds.height) / 2 - 16) * 0.42,
-            outerRadius: min(bounds.width, bounds.height) / 2 - 16, count: model.visibleItems.count)
+            center: .init(x: bounds.midX, y: bounds.midY), innerRadius: outerRadius * 0.42,
+            outerRadius: outerRadius, count: model.visibleItems.count)
         feedback.selectionChanged(to: index, enabled: feedbackEnabled())
         model.selectedIndex = index
         return index != nil || (candidate != nil && dragSessionActive && !files.isEmpty) ? .copy : []
